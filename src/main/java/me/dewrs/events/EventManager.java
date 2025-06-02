@@ -7,20 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 public class EventManager {
-    private static EventManager instance;
+    private final EventManager instance;
     private final JavaPlugin plugin;
-    private EventManager(JavaPlugin plugin){
+
+    public EventManager(JavaPlugin plugin){
         this.plugin = plugin;
+        instance = this;
     }
 
-    private void init(JavaPlugin plugin){
-        if(instance != null){
-            return;
-        }
-        instance = new EventManager(plugin);
-    }
-
-    private void registerEvents(List<Listener> events){
+    public void registerEvents(List<Listener> events){
         for(Listener e : events){
             register(e);
         }
@@ -30,7 +25,7 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(event, plugin);
     }
 
-    public static EventManager getInstance() {
+    public EventManager getInstance() {
         return instance;
     }
 }

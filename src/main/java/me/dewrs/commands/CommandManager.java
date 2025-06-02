@@ -1,24 +1,18 @@
 package me.dewrs.commands;
 
+import me.dewrs.PluginCore;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 
 public class CommandManager {
-    private static CommandManager instance;
-    private final JavaPlugin plugin;
+    private final CommandManager instance;
+    private final PluginCore plugin;
 
-    private CommandManager(JavaPlugin plugin){
+    public CommandManager(PluginCore plugin){
+        instance = this;
         this.plugin = plugin;
-    }
-
-    public static void init(JavaPlugin plugin){
-        if(instance != null){
-            return;
-        }
-        instance = new CommandManager(plugin);
     }
 
     public void registerCommands(Map<String, CommandExecutor> commands){
@@ -35,7 +29,7 @@ public class CommandManager {
         pluginCommand.setExecutor(commandExecutor);
     }
 
-    public static CommandManager getInstance() {
+    public CommandManager getInstance() {
         return instance;
     }
 }
