@@ -1,16 +1,20 @@
 package me.dewrs.events;
 
+import me.dewrs.PluginCore;
+import me.dewrs.logger.LogSender;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EventManager {
     private final EventManager instance;
-    private final JavaPlugin plugin;
+    private final PluginCore plugin;
 
-    public EventManager(JavaPlugin plugin){
+    public EventManager(PluginCore plugin){
         this.plugin = plugin;
         instance = this;
     }
@@ -19,6 +23,7 @@ public class EventManager {
         for(Listener e : events){
             register(e);
         }
+        LogSender.sendMessage("&aEvents registered successfully");
     }
 
     private void register(Listener event){

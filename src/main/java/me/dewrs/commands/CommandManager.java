@@ -1,6 +1,7 @@
 package me.dewrs.commands;
 
 import me.dewrs.PluginCore;
+import me.dewrs.logger.LogSender;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 
@@ -19,6 +20,7 @@ public class CommandManager {
         for(Map.Entry<String, CommandExecutor> entry : commands.entrySet()){
             register(entry.getKey(), entry.getValue());
         }
+        LogSender.sendMessage("&aCommands registered successfully");
     }
 
     private void register(String command, CommandExecutor commandExecutor){
