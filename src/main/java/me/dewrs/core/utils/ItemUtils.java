@@ -1,6 +1,6 @@
-package me.dewrs.utils;
+package me.dewrs.core.utils;
 
-import me.dewrs.model.CustomItem;
+import me.dewrs.core.model.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -1,7 +1,7 @@
-package me.dewrs.commands;
+package me.dewrs.core.commands;
 
-import me.dewrs.PluginCore;
-import me.dewrs.logger.LogSender;
+import me.dewrs.core.PluginCore;
+import me.dewrs.core.logger.LogSender;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 

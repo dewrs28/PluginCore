@@ -1,4 +1,4 @@
-package me.dewrs.database;
+package me.dewrs.core.database;
 
 public enum StorageType {
     MYSQL, SQLITE;

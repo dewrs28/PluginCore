@@ -1,6 +1,6 @@
-package me.dewrs.utils;
+package me.dewrs.core.utils;
 
-import me.dewrs.PluginCore;
+import me.dewrs.core.PluginCore;
 
 public enum ServerVersion {
     v1_8_R1,

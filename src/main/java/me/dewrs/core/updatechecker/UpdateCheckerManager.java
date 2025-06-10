@@ -1,6 +1,6 @@
-package me.dewrs.updatechecker;
+package me.dewrs.core.updatechecker;
 
-import me.dewrs.logger.LogSender;
+import me.dewrs.core.logger.LogSender;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

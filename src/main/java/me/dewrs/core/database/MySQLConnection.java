@@ -1,4 +1,4 @@
-package me.dewrs.database;
+package me.dewrs.core.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

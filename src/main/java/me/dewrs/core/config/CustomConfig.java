@@ -1,6 +1,6 @@
-package me.dewrs.config;
+package me.dewrs.core.config;
 
-import me.dewrs.PluginCore;
+import me.dewrs.core.PluginCore;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

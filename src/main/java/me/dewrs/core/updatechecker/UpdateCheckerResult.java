@@ -1,4 +1,4 @@
-package me.dewrs.updatechecker;
+package me.dewrs.core.updatechecker;
 
 public class UpdateCheckerResult {
 

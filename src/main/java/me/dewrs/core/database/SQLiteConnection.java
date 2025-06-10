@@ -1,4 +1,4 @@
-package me.dewrs.database;
+package me.dewrs.core.database;
 
 import java.io.File;
 import java.io.IOException;

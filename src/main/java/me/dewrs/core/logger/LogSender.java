@@ -1,7 +1,7 @@
-package me.dewrs.logger;
+package me.dewrs.core.logger;
 
-import me.dewrs.PluginCore;
-import me.dewrs.utils.MessageUtils;
+import me.dewrs.core.PluginCore;
+import me.dewrs.core.utils.MessageUtils;
 import org.bukkit.Bukkit;
 
 public class LogSender {

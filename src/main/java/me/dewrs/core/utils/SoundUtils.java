@@ -1,6 +1,6 @@
-package me.dewrs.utils;
+package me.dewrs.core.utils;
 
-import me.dewrs.logger.LogSender;
+import me.dewrs.core.logger.LogSender;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 

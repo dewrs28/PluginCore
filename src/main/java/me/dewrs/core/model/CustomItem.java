@@ -1,4 +1,4 @@
-package me.dewrs.model;
+package me.dewrs.core.model;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

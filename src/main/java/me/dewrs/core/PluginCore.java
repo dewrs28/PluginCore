@@ -1,14 +1,13 @@
-package me.dewrs;
+package me.dewrs.core;
 
-import me.dewrs.bstats.Metrics;
-import me.dewrs.commands.CommandManager;
-import me.dewrs.database.ConnectionFactory;
-import me.dewrs.database.StorageFactory;
-import me.dewrs.database.StorageType;
-import me.dewrs.events.EventManager;
-import me.dewrs.logger.LogSender;
-import me.dewrs.updatechecker.UpdateCheckerManager;
-import me.dewrs.utils.ServerVersion;
+import me.dewrs.core.bstats.Metrics;
+import me.dewrs.core.commands.CommandManager;
+import me.dewrs.core.database.ConnectionFactory;
+import me.dewrs.core.database.StorageType;
+import me.dewrs.core.events.EventManager;
+import me.dewrs.core.logger.LogSender;
+import me.dewrs.core.updatechecker.UpdateCheckerManager;
+import me.dewrs.core.utils.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;

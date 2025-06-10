@@ -1,9 +1,9 @@
-package me.dewrs.database;
+package me.dewrs.core.database;
 
-import me.dewrs.PluginCore;
-import me.dewrs.logger.LogSender;
-import me.dewrs.utils.MessageUtils;
-import me.dewrs.utils.ObjectUtils;
+import me.dewrs.core.PluginCore;
+import me.dewrs.core.logger.LogSender;
+import me.dewrs.core.utils.MessageUtils;
+import me.dewrs.core.utils.ObjectUtils;
 import org.bukkit.Bukkit;
 
 import java.io.File;

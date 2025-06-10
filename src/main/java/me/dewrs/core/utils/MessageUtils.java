@@ -1,4 +1,4 @@
-package me.dewrs.utils;
+package me.dewrs.core.utils;
 
 import net.md_5.bungee.api.ChatColor;
 

@@ -1,4 +1,4 @@
-package me.dewrs.utils;
+package me.dewrs.core.utils;
 
 public class ObjectUtils {
     public enum ObjectType{

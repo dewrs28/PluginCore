@@ -1,4 +1,4 @@
-package me.dewrs.model;
+package me.dewrs.core.model;
 
 public class CustomInventory {
 }

@@ -1,13 +1,10 @@
-package me.dewrs.events;
+package me.dewrs.core.events;
 
-import me.dewrs.PluginCore;
-import me.dewrs.logger.LogSender;
+import me.dewrs.core.PluginCore;
+import me.dewrs.core.logger.LogSender;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EventManager {

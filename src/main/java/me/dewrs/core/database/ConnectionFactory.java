@@ -1,4 +1,4 @@
-package me.dewrs.database;
+package me.dewrs.core.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
