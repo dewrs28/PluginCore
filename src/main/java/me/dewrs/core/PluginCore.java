@@ -96,6 +96,10 @@ public class PluginCore extends JavaPlugin {
         return serverVersion;
     }
 
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
     public ConnectionFactory getConnectionFactory() {
         return connectionFactory;
     }
