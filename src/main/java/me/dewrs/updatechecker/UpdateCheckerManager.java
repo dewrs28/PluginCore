@@ -43,7 +43,7 @@ public class UpdateCheckerManager {
                 LogSender.sendUpdateMessage(pluginName, version, latestVersion, spigotId);
             }
         } else {
-            LogSender.sendErrorMessage("&cError while checking update.");
+            LogSender.sendErrorMessage("Error while checking update.");
         }
     }
 

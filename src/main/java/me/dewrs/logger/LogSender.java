@@ -7,15 +7,15 @@ import org.bukkit.Bukkit;
 public class LogSender {
 
     public static void sendMessage(String message){
-        Bukkit.getConsoleSender().sendMessage(PluginCore.getPrefix()+MessageUtils.getColoredMessage(message));
+        Bukkit.getConsoleSender().sendMessage(PluginCore.getPluginPrefix()+MessageUtils.getColoredMessage(message));
     }
 
     public static void sendWarnMessage(String message){
-        Bukkit.getLogger().warning(PluginCore.getPrefix()+MessageUtils.getColoredMessage(message));
+        Bukkit.getLogger().warning("["+PluginCore.getPluginName()+"] "+message);
     }
 
     public static void sendErrorMessage(String message){
-        Bukkit.getLogger().severe(PluginCore.getPrefix()+MessageUtils.getColoredMessage(message));
+        Bukkit.getLogger().severe("["+PluginCore.getPluginName()+"] "+message);
     }
 
     public static void sendUpdateMessage(String pluginName, String actualVersion, String latestVersion, int spigotId){
