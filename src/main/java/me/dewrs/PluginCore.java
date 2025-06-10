@@ -2,6 +2,7 @@ package me.dewrs;
 
 import me.dewrs.commands.CommandManager;
 import me.dewrs.events.EventManager;
+import me.dewrs.logger.LogSender;
 import me.dewrs.updatechecker.UpdateCheckerManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,11 +25,13 @@ public class PluginCore extends JavaPlugin {
         updateCheckerManager = new UpdateCheckerManager(version, name);
         updateCheckerManager.manageUpdateChecker(spigotId);
         enable();
+        LogSender.sendMessage("&ahas been enabled!");
     }
 
     @Override
     public final void onDisable(){
         disable();
+        LogSender.sendMessage("&ahas been disabled!");
     }
 
     protected void enable(){
