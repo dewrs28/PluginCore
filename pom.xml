@@ -53,7 +53,7 @@
                     <relocations>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>me.dewrs.libs.hikaricp</shadedPattern>
+                            <shadedPattern>me.dewrs.core.libs.hikaricp</shadedPattern>
                             <includes>
                                 <include>com.zaxxer.hikari.**</include>
                             </includes>
