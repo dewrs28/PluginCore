@@ -1,6 +1,10 @@
 package me.dewrs;
 
+import me.dewrs.bstats.Metrics;
 import me.dewrs.commands.CommandManager;
+import me.dewrs.database.ConnectionFactory;
+import me.dewrs.database.StorageFactory;
+import me.dewrs.database.StorageType;
 import me.dewrs.events.EventManager;
 import me.dewrs.logger.LogSender;
 import me.dewrs.updatechecker.UpdateCheckerManager;
@@ -20,20 +24,25 @@ public class PluginCore extends JavaPlugin {
     protected static String prefix;
     protected static String name;
     protected int spigotId;
+    protected int metricsId;
     private static ServerVersion serverVersion;
+    protected ConnectionFactory connectionFactory;
+    protected StorageType storageType;
 
     @Override
     public final void onEnable(){
-        setVersion();
+        setServerVersion();
         name = pluginDescriptionFile.getName();
 
-        commandManager = new CommandManager(this);
-        eventManager = new EventManager(this);
-
+        commandManager = new CommandManager(this).getInstance();
+        eventManager = new EventManager(this).getInstance();
         updateCheckerManager = new UpdateCheckerManager(version, name);
-        updateCheckerManager.manageUpdateChecker(spigotId);
 
         enable();
+
+        updateCheckerManager.manageUpdateChecker(spigotId);
+        new Metrics(this, metricsId);
+
         LogSender.sendMessage("&ahas been enabled!");
     }
 
@@ -43,15 +52,7 @@ public class PluginCore extends JavaPlugin {
         LogSender.sendMessage("&ahas been disabled!");
     }
 
-    protected void enable(){
-
-    }
-
-    protected void disable(){
-
-    }
-
-    public void setVersion(){
+    public void setServerVersion(){
         String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("-")[0];
         switch(bukkitVersion){
@@ -78,6 +79,12 @@ public class PluginCore extends JavaPlugin {
         }
     }
 
+    protected void enable(){
+    }
+
+    protected void disable(){
+    }
+
     public static String getPluginPrefix(){
         return prefix;
     }
@@ -88,6 +95,18 @@ public class PluginCore extends JavaPlugin {
 
     public static ServerVersion getServerVersion() {
         return serverVersion;
+    }
+
+    public ConnectionFactory getConnectionFactory() {
+        return connectionFactory;
+    }
+
+    public StorageType getStorageType() {
+        return storageType;
+    }
+
+    public void setStorageType(StorageType storageType) {
+        this.storageType = storageType;
     }
 
     public boolean isOutdated(){
