@@ -7,13 +7,9 @@ import me.dewrs.core.utils.ObjectUtils;
 import org.bukkit.Bukkit;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class StorageFactory {
     protected PluginCore plugin;
@@ -78,7 +74,7 @@ public class StorageFactory {
         }
     }
 
-    private String getInsertQueryFromMap(Map<String, Object> values) {
+    private String getInsertQuery(Map<String, Object> values) {
         StringBuilder query = new StringBuilder("INSERT INTO %table% (");
         List<String> nameColumns = new ArrayList<>();
         List<String> nameValues = new ArrayList<>();
@@ -91,9 +87,9 @@ public class StorageFactory {
         return query.toString();
     }
 
-    protected void insertValueInTable(String table, Map<String, Object> values) {
+    protected void insertValueInTable(String table, Map<String, Object> values, Runnable callBack) {
         try (Connection con = this.getConnection()) {
-            PreparedStatement statement = con.prepareStatement(getInsertQueryFromMap(values).replaceAll("%table%", table),
+            PreparedStatement statement = con.prepareStatement(getInsertQuery(values).replaceAll("%table%", table),
                     Statement.RETURN_GENERATED_KEYS);
             int i = 1;
             for (Map.Entry<String, Object> entry : values.entrySet()) {
@@ -118,7 +114,106 @@ public class StorageFactory {
                 i++;
             }
             statement.executeUpdate();
+            callBack.run();
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private String getSelectQuery(List<String> columns, List<String> conditions){
+        StringBuilder query;
+        if(columns.isEmpty()){
+            query = new StringBuilder("SELECT * FROM %table%");
+        }else{
+            query = new StringBuilder("SELECT ");
+            query.append(MessageUtils.getStringFromList(columns)).append(" FROM %table%");
+        }
+        if(conditions.isEmpty()) {
+            return query.toString();
+        }
+        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        return query.toString();
+    }
+
+    //Main Map: Id - Map of Values
+    //Map of Values: Column - Value
+    protected void selectInTable(String table, List<String> columns, List<String> conditions, Consumer<TreeMap<Integer, Map<String, Object>>> callBack){
+        try (Connection con = this.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(getSelectQuery(columns, conditions).replaceAll("%table%", table),
+                    Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = statement.executeQuery();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int maxColumns = metaData.getColumnCount();
+            TreeMap<Integer, Map<String, Object>> result = new TreeMap<>();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                Map<String, Object> values = new LinkedHashMap<>();
+                for (int i = 1; i <= maxColumns; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    Object value = resultSet.getObject(i);
+                    values.put(columnName, value);
+                }
+                result.put(id, values);
+            }
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                callBack.accept(result);
+            });
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private String getUpdateQuery(List<String> changes, List<String> conditions){
+        StringBuilder query = new StringBuilder("UPDATE %table% SET ");
+        if(changes.isEmpty()){
+            throw new RuntimeException();
+        }
+        query.append(MessageUtils.getStringFromList(changes));
+        if(conditions.isEmpty()){
+            return query.toString();
+        }
+        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        return query.toString();
+    }
+
+    protected void updateInTable(String table, List<String> changes, List<String> conditions, Runnable callBack){
+        try (Connection con = this.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(getUpdateQuery(changes, conditions).replaceAll("%table%", table),
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+            callBack.run();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private String getDeleteQuery(List<String> conditions){
+        StringBuilder query = new StringBuilder("DELETE FROM %table%");
+        if(conditions.isEmpty()){
+            return query.toString();
+        }
+        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        return query.toString();
+    }
+
+    protected void deleteInTable(String table, List<String> conditions, Runnable callBack){
+        try (Connection con = this.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(getDeleteQuery(conditions).replaceAll("%table%", table),
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+            callBack.run();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    protected void dropTable(String table, Runnable callBack){
+        try (Connection con = this.getConnection()) {
+            PreparedStatement statement = con.prepareStatement("DROP TABLE "+table,
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+            callBack.run();
+        }catch (Exception ex){
             ex.printStackTrace();
         }
     }
