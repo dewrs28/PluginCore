@@ -34,8 +34,8 @@ public class StorageFactory {
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
         }
-        createTables(tables);
         plugin.setStorageType(storageType);
+        createTables(tables);
         LogSender.sendMessage("&aThe database has been successfully connected as &b"+storageType.toString()+"&a.");
     }
 
