@@ -29,7 +29,7 @@ public class StorageFactory {
     protected void initStorage(StorageType storageType, Map<String, Map<String, StorageType.ValueType>> tables) {
         try {
             Connection con = getConnection();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             LogSender.sendErrorMessage("An error occurred while initiating the connection to the database.");
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
@@ -72,7 +72,7 @@ public class StorageFactory {
                         Statement.RETURN_GENERATED_KEYS);
                 statement.executeUpdate();
             }
-        }catch (SQLException ex){
+        }catch (Exception ex){
             ex.printStackTrace();
         }
     }
@@ -117,7 +117,7 @@ public class StorageFactory {
                 i++;
             }
             statement.executeUpdate();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
