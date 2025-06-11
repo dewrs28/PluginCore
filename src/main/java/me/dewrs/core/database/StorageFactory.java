@@ -120,7 +120,17 @@ public class StorageFactory {
         }
     }
 
-    private String getSelectQuery(List<String> columns, List<String> conditions){
+    private void appendConditions(StringBuilder query, Map<String, Object> conditions){
+        if (!conditions.isEmpty()) {
+            List<String> conditionStrings = new ArrayList<>();
+            for (String column : conditions.keySet()) {
+                conditionStrings.add(column + " = ?");
+            }
+            query.append(" WHERE ").append(String.join(" AND ", conditionStrings));
+        }
+    }
+
+    private String getSelectQuery(List<String> columns, Map<String, Object> conditions){
         StringBuilder query;
         if(columns.isEmpty()){
             query = new StringBuilder("SELECT * FROM %table%");
@@ -128,19 +138,20 @@ public class StorageFactory {
             query = new StringBuilder("SELECT ");
             query.append(MessageUtils.getStringFromList(columns)).append(" FROM %table%");
         }
-        if(conditions.isEmpty()) {
-            return query.toString();
-        }
-        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        appendConditions(query, conditions);
         return query.toString();
     }
 
     //Main Map: Id - Map of Values
     //Map of Values: Column - Value
-    protected void selectInTable(String table, List<String> columns, List<String> conditions, Consumer<TreeMap<Integer, Map<String, Object>>> callBack){
+    protected void selectInTable(String table, List<String> columns, Map<String, Object> conditions, Consumer<TreeMap<Integer, Map<String, Object>>> callBack){
         try (Connection con = this.getConnection()) {
             PreparedStatement statement = con.prepareStatement(getSelectQuery(columns, conditions).replaceAll("%table%", table),
                     Statement.RETURN_GENERATED_KEYS);
+            int index = 1;
+            for (Object value : conditions.values()) {
+                statement.setObject(index++, value);
+            }
             ResultSet resultSet = statement.executeQuery();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int maxColumns = metaData.getColumnCount();
@@ -163,23 +174,45 @@ public class StorageFactory {
         }
     }
 
-    private String getUpdateQuery(List<String> changes, List<String> conditions){
+    private String getExistQuery(Map<String, Object> conditions){
+        StringBuilder query = new StringBuilder("SELECT 1 FROM %table%");
+        appendConditions(query, conditions);
+        return query.toString();
+    }
+
+    protected void valueExist(String table, Map<String, Object> conditions, Consumer<Boolean> callBack){
+        try (Connection con = this.getConnection()) {
+            PreparedStatement statement = con.prepareStatement(getExistQuery(conditions).replaceAll("%table%", table),
+                    Statement.RETURN_GENERATED_KEYS);
+            int index = 1;
+            for (Object value : conditions.values()) {
+                statement.setObject(index++, value);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            callBack.accept(resultSet.next());
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private String getUpdateQuery(List<String> changes, Map<String, Object> conditions){
         StringBuilder query = new StringBuilder("UPDATE %table% SET ");
         if(changes.isEmpty()){
             throw new RuntimeException();
         }
         query.append(MessageUtils.getStringFromList(changes));
-        if(conditions.isEmpty()){
-            return query.toString();
-        }
-        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        appendConditions(query, conditions);
         return query.toString();
     }
 
-    protected void updateInTable(String table, List<String> changes, List<String> conditions, Runnable callBack){
+    protected void updateInTable(String table, List<String> changes, Map<String, Object> conditions, Runnable callBack){
         try (Connection con = this.getConnection()) {
             PreparedStatement statement = con.prepareStatement(getUpdateQuery(changes, conditions).replaceAll("%table%", table),
                     Statement.RETURN_GENERATED_KEYS);
+            int index = 1;
+            for (Object value : conditions.values()) {
+                statement.setObject(index++, value);
+            }
             statement.executeUpdate();
             callBack.run();
         }catch (Exception ex){
@@ -187,19 +220,20 @@ public class StorageFactory {
         }
     }
 
-    private String getDeleteQuery(List<String> conditions){
+    private String getDeleteQuery(Map<String, Object> conditions){
         StringBuilder query = new StringBuilder("DELETE FROM %table%");
-        if(conditions.isEmpty()){
-            return query.toString();
-        }
-        query.append(" WHERE ").append(String.join(" AND ", conditions));
+        appendConditions(query, conditions);
         return query.toString();
     }
 
-    protected void deleteInTable(String table, List<String> conditions, Runnable callBack){
+    protected void deleteInTable(String table, Map<String, Object> conditions, Runnable callBack){
         try (Connection con = this.getConnection()) {
             PreparedStatement statement = con.prepareStatement(getDeleteQuery(conditions).replaceAll("%table%", table),
                     Statement.RETURN_GENERATED_KEYS);
+            int index = 1;
+            for (Object value : conditions.values()) {
+                statement.setObject(index++, value);
+            }
             statement.executeUpdate();
             callBack.run();
         }catch (Exception ex){
