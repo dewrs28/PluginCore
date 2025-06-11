@@ -195,21 +195,28 @@ public class StorageFactory {
         }
     }
 
-    private String getUpdateQuery(List<String> changes, Map<String, Object> conditions){
-        StringBuilder query = new StringBuilder("UPDATE %table% SET ");
+    private String getUpdateQuery(Map<String, Object> changes, Map<String, Object> conditions){
         if(changes.isEmpty()){
             throw new RuntimeException();
         }
-        query.append(MessageUtils.getStringFromList(changes));
+        StringBuilder query = new StringBuilder("UPDATE %table% SET ");
+        List<String> setParts = new ArrayList<>();
+        for (String column : changes.keySet()) {
+            setParts.add(column + " = ?");
+        }
+        query.append(MessageUtils.getStringFromList(setParts));
         appendConditions(query, conditions);
         return query.toString();
     }
 
-    protected void updateInTable(String table, List<String> changes, Map<String, Object> conditions, Runnable callBack){
+    protected void updateInTable(String table, Map<String, Object> changes, Map<String, Object> conditions, Runnable callBack){
         try (Connection con = this.getConnection()) {
             PreparedStatement statement = con.prepareStatement(getUpdateQuery(changes, conditions).replaceAll("%table%", table),
                     Statement.RETURN_GENERATED_KEYS);
             int index = 1;
+            for (Object value : changes.values()) {
+                statement.setObject(index++, value);
+            }
             for (Object value : conditions.values()) {
                 statement.setObject(index++, value);
             }
