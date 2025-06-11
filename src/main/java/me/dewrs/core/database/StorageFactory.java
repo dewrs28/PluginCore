@@ -55,7 +55,7 @@ public class StorageFactory {
             Map<String, StorageType.ValueType> values = entry.getValue();
             List<String> columns = new ArrayList<>();
             for(Map.Entry<String, StorageType.ValueType> v : values.entrySet()){
-                String column = v.getKey()+" "+entry.getValue().toString()+" NOT NULL";
+                String column = v.getKey()+" "+v.getValue().name()+" NOT NULL";
                 columns.add(column);
             }
             query.append(String.join(",", columns)).append(")");
