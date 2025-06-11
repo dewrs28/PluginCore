@@ -68,6 +68,7 @@ public class StorageFactory {
         try (Connection con = this.getConnection()) {
             List<String> querys = getCreateTablesQuery(tables);
             for(String q : querys){
+                LogSender.sendMessage(q);
                 PreparedStatement statement = con.prepareStatement(q,
                         Statement.RETURN_GENERATED_KEYS);
                 statement.executeUpdate();
