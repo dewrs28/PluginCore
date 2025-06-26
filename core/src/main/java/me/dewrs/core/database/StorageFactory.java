@@ -3,7 +3,6 @@ package me.dewrs.core.database;
 import me.dewrs.core.PluginCore;
 import me.dewrs.core.logger.LogSender;
 import me.dewrs.core.utils.MessageUtils;
-import me.dewrs.core.utils.ObjectUtils;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -94,23 +93,7 @@ public class StorageFactory {
             int i = 1;
             for (Map.Entry<String, Object> entry : values.entrySet()) {
                 Object object = entry.getValue();
-                switch (ObjectUtils.getObjectType(object)){
-                    case STRING: {
-                        String value = (String) object;
-                        statement.setString(i, value);
-                        break;
-                    }
-                    case INTEGER: {
-                        int value = (Integer) object;
-                        statement.setInt(i, value);
-                        break;
-                    }
-                    case LONG: {
-                        long value = (Long) object;
-                        statement.setLong(i, value);
-                        break;
-                    }
-                }
+                statement.setObject(i, object);
                 i++;
             }
             statement.executeUpdate();

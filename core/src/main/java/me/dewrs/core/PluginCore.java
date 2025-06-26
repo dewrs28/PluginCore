@@ -20,11 +20,13 @@ public class PluginCore extends JavaPlugin {
     protected PluginDescriptionFile pluginDescriptionFile = getDescription();
     protected String version = pluginDescriptionFile.getVersion();
 
+    private static ServerVersion serverVersion;
+    private static String name;
+
     protected static String prefix;
-    protected static String name;
     protected int spigotId;
     protected int metricsId;
-    private static ServerVersion serverVersion;
+
     protected ConnectionFactory connectionFactory;
     protected StorageType storageType;
 

@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 public class CustomConfig {
     private PluginCore plugin;
@@ -79,5 +80,13 @@ public class CustomConfig {
             fileConfiguration.setDefaults(defConfig);
         }
         return true;
+    }
+
+    public void updateConfig(){
+        try {
+            ConfigUpdater.update(plugin, fileName, file, Collections.emptyList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
